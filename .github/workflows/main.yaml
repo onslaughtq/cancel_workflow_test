@@ -18,32 +18,19 @@ jobs:
           set -e
           echo "Staging"
 
-  precheck:
-    runs-on: ubuntu-slim
-    needs: staging
-    steps:
-      - uses: fkirc/skip-duplicate-actions@v5
-        with:
-          cancel_others: true
-
-
   production:
     name: Deploy Production
     runs-on: ubuntu-slim
     environment: production
-    needs: precheck
+    needs: staging
     steps:
       - name: Echo Production
         run: |
           set -e
           echo "Production"
-
-  cancelled:
-    name: Cancelled
-    runs-on: ubuntu-slim
-    if: ${{ cancelled() }}
-    steps:
-      - name: Cancelled
+      - name: Only if cancelled
+        if: ${{ cancelled() }}
         run: |
           set -e
-          echo "Workflow cancelled"
+          echo "This was cancelled"
+
