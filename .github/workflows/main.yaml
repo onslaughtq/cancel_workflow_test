@@ -37,3 +37,13 @@ jobs:
         run: |
           set -e
           echo "Production"
+
+  cancelled:
+    name: Cancelled
+    runs-on: ubuntu-slim
+    if: ${{ cancelled() }}
+    steps:
+      - name: Cancelled
+        run: |
+          set -e
+          echo "Workflow cancelled"
