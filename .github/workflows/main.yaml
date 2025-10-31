@@ -1,0 +1,39 @@
+name: Cancel Workflow Test
+
+on:
+  push:
+
+concurrency:
+  group: deploy-${{ github.ref}}-prod
+  cancel-in-progress: false
+
+jobs:
+  staging:
+    name: Deploy Staging
+    runs-on: ubuntu-slim
+    environment: staging
+    steps:
+      - name: Echo Staging
+        run: |
+          set -e
+          echo "Staging"
+
+  precheck:
+    runs-on: ubuntu-slim
+    needs: staging
+    steps:
+      - uses: fkirc/skip-duplicate-actions@v5
+        with:
+          cancel_others: true
+
+
+  production:
+    name: Deploy Production
+    runs-on: ubuntu-slim
+    environment: production
+    needs: precheck
+    steps:
+      - name: Echo Production
+        run: |
+          set -e
+          echo "Production"
