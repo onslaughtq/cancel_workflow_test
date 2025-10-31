@@ -24,13 +24,13 @@ jobs:
     environment: production
     needs: staging
     steps:
-      - name: Echo Production
-        run: |
-          set -e
-          echo "Production"
       - name: Only if cancelled
         if: ${{ cancelled() }}
         run: |
           set -e
           echo "This was cancelled"
+      - name: Echo Production
+        run: |
+          set -e
+          echo "Production"
 
