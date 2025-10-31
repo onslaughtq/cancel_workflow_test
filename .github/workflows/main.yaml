@@ -34,3 +34,15 @@ jobs:
           set -e
           echo "Production"
 
+  runFialure:
+    name: Run on failure
+    runs-on: ubuntu-slim
+    needs: production
+    if: ${{ failure() }}
+    steps:
+      - name: run on failure
+        if: ${{ cancelled() }}
+        run: |
+          set -e
+          echo "Run on failure"
+
